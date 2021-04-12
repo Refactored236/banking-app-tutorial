@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refactored Banking</title>
+    <script src="./js/app.js" defer></script>
+</head>
+<body>
+    <div id="app">Loading...</div>
+    
+    <template id="login">
+        <h1>Refactored Banking</h1>
+        <section>
+            <a href="/dashboard" onclick="onLinkClick()">Login</a>
+        </section>
+    </template>
+
+    <template id="dashboard">
+        <header>
+            <h1>Refactored Banking</h1>
+            <a href="/login" onclick="onLinkClick()">Logout</a>
+        </header>
+        <section>
+            Balance: 100€
+        </section>
+        <section>
+            <h2>Transactions</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Object</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+    </template>
+
+</body>
+</html>
