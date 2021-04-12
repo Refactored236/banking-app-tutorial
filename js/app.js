@@ -1,10 +1,13 @@
 //Constants
 const routes = {
     '/login': {  title: 'Login', templateId: 'login' },
-    '/dashboard': { title: 'My Dashboard', templateId: 'dashboard' },
+    '/dashboard': { title: 'My Dashboard', templateId: 'dashboard', init: updateDashboard },
     '/credits': { title: 'App Credits', templateId: 'credits' }
 
 }
+
+//Global Variables
+let account = null;
 
 const userDuplicateError = 'User already exists';
 
@@ -19,8 +22,6 @@ function updateRoute(){
         return navigate('/login');
     }
 
-    console.log(route.templateId);
-
     const template = document.getElementById(route.templateId);
     const view = template.content.cloneNode(true);
     const app  =document.getElementById('app');
@@ -30,6 +31,11 @@ function updateRoute(){
 
     //Updates the title
     document.title = route.title;
+    
+    //Execute function on init of dashboard
+    if (typeof route.init === 'function') {
+        route.init();
+    }
 }
 
 function navigate(path){
@@ -50,16 +56,31 @@ async function register(){
     const data = Object.fromEntries(formData);
     const jsonData = JSON.stringify(data);
     const result = await createAccount(jsonData);
-    const errorDiv = document.getElementById('registrationError');
 
     if (result.error) {
         if (result.error == userDuplicateError) {
-            errorDiv.innerHTML = 'Username already registered!';
+            updateElement('registrationError', 'Username already registered!');
         }
         return console.log('An error occured:', result.error);
       }
     
     console.log('Account created!', result);
+
+    account = result;
+    navigate('/dashboard');
+}
+
+async function login(){
+    const loginForm = document.getElementById('loginForm');
+    const user = loginForm.user.value;
+    const data = await getAccount(user);
+
+    if (data.error) {
+        return updateElement('loginError', data.error);
+    }
+
+    account = data;
+    navigate('/dashboard');
 }
 
 async function createAccount(account){
@@ -75,7 +96,53 @@ async function createAccount(account){
         return {error: error.message || 'Unknown Error'};        
     }
 }
-  //Run Time calls
+
+async function getAccount(user){
+    try {
+        const response = await fetch('//localhost:5000/api/accounts/' + encodeURIComponent(user));
+        return await response.json();
+    } catch (error) {
+        return {error: error.message || 'Unknown Error'};  
+    }
+}
+
+function createTransactionRow(transaction){
+    const template = document.getElementById('transaction');
+    const transactionRow = template.content.cloneNode(true);
+    const tr = transactionRow.querySelector('tr');
+    tr.children[0].textContent = transaction.date;
+    tr.children[1].textContent = transaction.object;
+    tr.children[2].textContent = transaction.amount.toFixed(2);
+    return transactionRow;
+}
+
+function updateDashboard() {
+    if (!account) {
+      return navigate('/login');
+    }
+  
+    updateElement('description', account.description);
+    updateElement('balance', account.balance.toFixed(2));
+    updateElement('currency', account.currency);
+
+    //Update the transactions
+    const transactionsRows = document.createDocumentFragment();
+    for (const transaction of account.transactions) {
+        const transactionRow = createTransactionRow(transaction);
+        transactionsRows.appendChild(transactionRow);
+    }
+    updateElement('transactions', transactionsRows);
+  }
+
+
+function updateElement(id, textOrNode) {
+    const element = document.getElementById(id);
+    element.textContent = ''; // Removes all children
+    //Using append to all for text or nodes to be added.
+    element.append(textOrNode);
+  }
+
+//Run Time calls
 
   //Handle browser back/forward
   window.onpopstate = () => updateRoute();
