@@ -1,0 +1,158 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Custom Properties */
+
+:root {
+    --ff-primary: 'Source Sans Pro', sans-serif;
+    --ff-secondary: 'Source Code Pro', monospace;
+
+    --fw-regular: 300;
+    --fw-bold: 900;
+
+    --clr-light: #fdf8f5;
+    --clr-dark: #8b4116;
+    --clr-accent: #dd6824;
+    --fs-h1: 3rem;
+    --fs-h2: 2.25rem;
+    --fs-h3: 1.25rem;
+    --fs-body: 1rem;
+
+    --bs: 0.25em 0.25em 0.75em rgba(0,0,0,.25),
+            0.125em 0.125em 0.25em rgba(0,0,0,.15);
+}
+
+@media (min-width: 800px){
+    :root {
+        --fs-h1: 4.5rem;
+        --fs-h2: 3.75rem;
+        --fs-h3: 1.5rem;
+        --fs-body: 1.125rem;
+    }
+}
+
+/* General Styles */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--clr-accent);
+    color: var(--clr-light);
+    margin: 0;
+    font-family: var(--ff-primary);
+    font-size: var(--fs-body);
+    line-height: 1.6;
+}
+
+section {
+    padding: 1em 1em;
+}
+
+strong {
+    font-weight: var(--fw-bold);
+}
+
+:focus {
+    outline: 2px solid var(--clr-dark);
+    outline-offset: 2px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+}
+
+label {
+    text-transform: uppercase;
+    font-size: 70%;
+}
+
+input {
+    margin-top: 1px;
+    margin-bottom: 10px;
+    border: 1;
+    height: 1.5em;
+    border-radius: .25em;
+    padding: 5px;
+    height: 1.5rem;
+}
+
+button {
+    font-weight: bold;
+    background-color: var(--clr-dark);
+    color: var(--clr-light);
+    height: 40px;
+    padding: 10px;
+    border: 0;
+    border-radius: .25em;
+    text-transform: uppercase;
+    min-width: 100px;
+    margin: 10px 0;
+  }
+
+/* Typography */
+h1,
+h2,
+h3 {
+    line-height: 1;
+    margin: 0;
+}
+
+h1 {
+    font-size: var(--fs-h2);
+}
+h2 {
+    font-size: var(--fs-h3);
+}
+h3 {
+    font-size: var(--fs-h3);
+}
+
+/* Header */
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+}
+
+.section__title--intro {
+    display: block;
+    text-align: center;
+}
+
+/* Login */
+
+hr {
+    color: var(--clr-dark);
+    width: 50%;
+}
+
+.login--title{
+    text-align: center;
+    padding-top: .5em;
+}
+
+.login-page {
+    display: flex;
+    /* height: 100%; */
+    align-items: center;
+    justify-content: center;
+    /* background: linear-gradient(var(--clr-accent), var(--clr-light)); */
+  }
+  .login-container {
+    flex: auto;
+    max-width: 480px;
+    max-height: 100%;
+    overflow: auto;
+    background: var(--clr-light);
+    color: var(--clr-accent);
+    border-radius: .25em;
+  }
