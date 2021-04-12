@@ -1,8 +1,8 @@
 //Constants
 const routes = {
-    '/login': { templateId: 'login' },
-    '/dashboard': { templateId: 'dashboard' },
-    '/credits': { templateId: 'credits' }
+    '/login': {  title: 'Login', templateId: 'login' },
+    '/dashboard': { title: 'My Dashboard', templateId: 'dashboard' },
+    '/credits': { title: 'App Credits', templateId: 'credits' }
 
 }
 
@@ -25,6 +25,9 @@ function updateRoute(){
     // Clear any existing content in the app DIV
     app.innerHTML = '';
     app.appendChild(view);
+
+    //Updates the title
+    document.title = route.title;
 }
 
 function navigate(path){
@@ -35,16 +38,14 @@ function navigate(path){
 
 function onLinkClick(event) {
     //We don't want the HTML to reload as we are using custom JS routing
-    //console.log(event);
-    
     event.preventDefault();
-    //console.log(event.target.href);
     navigate(event.target.href);
   }
 
   //Run Time calls
 
-  //Handle
+  //Handle browser back/forward
   window.onpopstate = () => updateRoute();
 
+  //Initial call to set route
   updateRoute();
