@@ -6,6 +6,8 @@ const routes = {
 
 }
 
+const userDuplicateError = 'User already exists';
+
 // Functions
 function updateRoute(){
     //Get the select route based on the current url (path section only)
@@ -48,13 +50,16 @@ async function register(){
     const data = Object.fromEntries(formData);
     const jsonData = JSON.stringify(data);
     const result = await createAccount(jsonData);
+    const errorDiv = document.getElementById('registrationError');
 
     if (result.error) {
+        if (result.error == userDuplicateError) {
+            errorDiv.innerHTML = 'Username already registered!';
+        }
         return console.log('An error occured:', result.error);
       }
     
     console.log('Account created!', result);
-
 }
 
 async function createAccount(account){
