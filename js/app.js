@@ -1,7 +1,9 @@
 //Constants
 const routes = {
     '/login': { templateId: 'login' },
-    '/dashboard': { templateId: 'dashboard' }
+    '/dashboard': { templateId: 'dashboard' },
+    '/credits': { templateId: 'credits' }
+
 }
 
 // Functions
@@ -40,4 +42,9 @@ function onLinkClick(event) {
     navigate(event.target.href);
   }
 
-updateRoute();
+  //Run Time calls
+
+  //Handle
+  window.onpopstate = () => updateRoute();
+
+  updateRoute();
