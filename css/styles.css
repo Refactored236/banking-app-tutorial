@@ -97,6 +97,11 @@ button {
     margin: 10px 0;
   }
 
+  button:hover {
+    filter: brightness(125%);
+    cursor: pointer;
+  }
+
 /* Typography */
 h1,
 h2,
@@ -143,11 +148,10 @@ hr {
 
 .login-page {
     display: flex;
-    /* height: 100%; */
     align-items: center;
     justify-content: center;
-    /* background: linear-gradient(var(--clr-accent), var(--clr-light)); */
   }
+
   .login-container {
     flex: auto;
     max-width: 480px;
@@ -155,5 +159,90 @@ hr {
     overflow: auto;
     background: var(--clr-light);
     color: var(--clr-accent);
-    border-radius: .25em;
+    border-radius: 1em;
   }
+
+  /* Dashboard */
+
+  .balance {
+    background: var(--clr-dark);
+    text-align: center;
+  }
+  
+  .balance > div {
+    color: var(--clr-light);
+    padding-top: var(--space-xs);
+    text-transform: uppercase;
+  }
+  
+  .balance > span {
+    color: var(--clr-light);
+    font-size: 3rem;
+  }
+
+  .account-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+    color: var(--clr-light);
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .transactions{
+    background-color:var(--clr-light);
+    color: var(--clr-dark);
+    margin-left:  1.5rem;
+    margin-right:  1.5rem;
+  }
+
+  table {
+      margin: 0 auto 0;
+      border-spacing: 0;
+  }
+
+  thead {
+    background: var(--clr-light);
+    text-align: left;
+  }
+
+  thead th {
+      border-bottom: 1px solid;
+  }
+
+  tr {
+      color: #8b4116;
+      width: 40em;
+  }
+
+  td {
+      width: 20em;
+  }
+
+  th, td {
+      padding: 0.5em;
+  }
+
+  #transactions tr:nth-child(even){
+      background:#fdf8f5;
+  }
+
+  #transactions tr:nth-child(odd){
+    background:#f0bb9d;
+    border-color:#f0bb9d ;
+}
+
+/* Make the first column use min width */
+td:first-child,
+th:first-child{
+    width: 1%;
+    white-space: nowrap;
+}
+
+/* Make the last column align right */
+td:last-child,
+th:last-child{
+    text-align: right;
+}
+
