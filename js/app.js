@@ -137,6 +137,10 @@ function returnToDashboard(){
     navigate('/dashboard');
 }
 
+function credits(){
+    navigate('/credits');
+}
+
 // State management functions
 function updateState(property, newData){
     state = Object.freeze({

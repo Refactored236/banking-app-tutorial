@@ -47,8 +47,8 @@
 
     <template id="dashboard">
         <header class="dashboard-header">
-            <a href="/login" onclick="onLinkClick()">Logout</a>
-            <a href="/credits" onclick="onLinkClick()">Credits</a>
+            <button onclick="credits()">Credits</button>
+            <button onclick="logout()">Logout</button>
         </header>
         <section class="balance">
             <div>Balance: </div><span id="currency"></span><span id="balance"></span>
@@ -101,8 +101,7 @@
 
     <template id="credits">
         <header>
-            <h1>Refactored Banking</h1>
-            <a href="/dashboard">Return to Dashboard</a>
+            <button onclick="returnToDashboard()">Return To Dashboard</button>
         </header>
         <section>
             <h2>Credits</h2>
