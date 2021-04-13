@@ -1,18 +1,22 @@
 //Constants
 const routes = {
     '/login': {  title: 'Login', templateId: 'login' },
-    '/dashboard': { title: 'My Dashboard', templateId: 'dashboard', init: updateDashboard },
-    '/credits': { title: 'App Credits', templateId: 'credits' }
+    '/dashboard': { title: 'My Dashboard', templateId: 'dashboard', init: refresh },
+    '/credits': { title: 'App Credits', templateId: 'credits' },
+    '/addTransaction': {title: 'Add Transaction', templateId: 'new-transaction'}
 }
 
 const apiURL = '//localhost:5000/api';
 const unknownError = 'Unknown Error';
 const userDuplicateError = 'User already exists';
+const storageKey = 'savedAccount';
 
 //Global Variables
-let account = null;
+let state = Object.freeze({
+    account: null
+});
 
-// Functions
+// Util Functions
 function updateRoute(){
     //Get the select route based on the current url (path section only)
     const path = window.location.pathname;
@@ -20,7 +24,8 @@ function updateRoute(){
 
     //If invalid route is selected then use login as default for now
     if (!route) {
-        return navigate('/login');
+        // return navigate('/login');
+        return navigate('/dashboard');
     }
 
     const template = document.getElementById(route.templateId);
@@ -51,6 +56,7 @@ function onLinkClick(event){
     navigate(event.target.href);
   }
 
+//Account management functions
 async function register(){
     const registerForm = document.getElementById('registerForm');
     const formData = new FormData(registerForm);
@@ -67,7 +73,7 @@ async function register(){
     
     console.log('Account created!', result);
 
-    account = result;
+    updateState('account', result);
     navigate('/dashboard');
 }
 
@@ -80,12 +86,69 @@ async function login(){
         return updateElement('loginError', data.error);
     }
 
-    account = data;
+    updateState('account', data);
     navigate('/dashboard');
 }
 
+function logout(){
+    //Clear existing state
+    updateState('account', null);
+    navigate('/login');
+}
+
+async function updateAccountData(){
+    const account = state.account;
+    if (!account) {
+        return logout();
+    }
+
+    const data = await getAccount(account.user);
+    if (data.error) {
+      return logout();
+    }
+    
+    updateState('account', data);
+}
+
+async function refresh() {
+    await updateAccountData();
+    updateDashboard();
+}
+
+// Add transaction functions
+async function addTransaction(){
+    navigate('/addTransaction');
+}
+
+async function submitTransaction(){
+    const newTransactionForm = document.getElementById('new-transaction-form');
+    const formData = new FormData(newTransactionForm);
+    const data = Object.fromEntries(formData);
+    const jsonData = JSON.stringify(data);
+
+    const result = await sendRequest('/accounts/'+ encodeURIComponent(state.account.user) + '/transactions', 'POST',jsonData );
+    if (result.error) {
+          return  updateElement('addTransactionError', result.error);
+      }
+    navigate('/dashboard');
+}
+
+function returnToDashboard(){
+    navigate('/dashboard');
+}
+
+// State management functions
+function updateState(property, newData){
+    state = Object.freeze({
+        ...state,
+        [property]: newData
+    });
+
+    localStorage.setItem(storageKey, JSON.stringify(state.account));
+}
+
 // API Interactions
-async function sendRequest(api, method, body) {
+async function sendRequest(api, method, body){
     try {
         
         const response = await fetch(apiURL + api, {
@@ -120,8 +183,11 @@ function createTransactionRow(transaction){
 }
 
 function updateDashboard() {
+
+    const account = state.account;
+
     if (!account) {
-      return navigate('/login');
+      return logout();
     }
   
     updateElement('description', account.description);
@@ -145,10 +211,18 @@ function updateElement(id, textOrNode) {
     element.append(textOrNode);
   }
 
+//   Initialisation Function for App
+function init(){
+    const savedAccount = localStorage.getItem(storageKey);
+    if (savedAccount) {
+        updateState('account', JSON.parse(savedAccount));
+      }
+    //Handle browser back/forward
+    window.onpopstate = () => updateRoute();
+    //Initial call to set route
+    updateRoute();
+}
+
 //Run Time calls
 
-  //Handle browser back/forward
-  window.onpopstate = () => updateRoute();
-
-  //Initial call to set route
-  updateRoute();
+init();

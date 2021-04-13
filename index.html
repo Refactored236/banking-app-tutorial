@@ -46,7 +46,7 @@
     </template>
 
     <template id="dashboard">
-        <header>
+        <header class="dashboard-header">
             <a href="/login" onclick="onLinkClick()">Logout</a>
             <a href="/credits" onclick="onLinkClick()">Credits</a>
         </header>
@@ -55,6 +55,7 @@
         </section>
         <section class="account-details">
             <h2 id="description"></h2>
+            <button class="add-transaction" onclick="addTransaction()">Add Transaction</button>
         </section>
         <section class="transactions">
             <table>
@@ -77,6 +78,25 @@
             <td></td>
             <td></td>
           </tr>
+    </template>
+
+    <template id="new-transaction">
+        <section class="new-transaction-page">
+            <div class="new-transaction-page-content">
+                <h2 class="new-transaction-page--title">Add New Transaction</h2>
+                <form id="new-transaction-form" action="javascript:submitTransaction()" class="new-transaction-page--inputs">
+                    <label for="date">Date</label>
+                    <input id="date" name="date" type="date" required>
+                    <label for="description">Description</label>
+                    <input id="description" name="object" type="text" maxlength="100" required>
+                    <label for="amount">Amount</label>
+                    <input id="amount" name="amount" type="number" value="0" required>
+                    <div id="addTransactionError"></div>
+                    <button>Add Transaction</button>
+                    <button onclick="returnToDashboard()">Cancel</button>
+                </form>
+            </div>
+        </section>
     </template>
 
     <template id="credits">
