@@ -249,3 +249,23 @@ th:last-child{
 }
 
 /* New Transaction page */
+.new-transaction-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+.new-transaction-page-container {
+    flex: auto;
+    max-width: 480px;
+    max-height: 100%;
+    overflow: auto;
+    background: var(--clr-light);
+    color: var(--clr-accent);
+    border-radius: 1em;
+  }
+
+  .new-transaction-page--title{
+    text-align: center;
+    padding-top: .5em;
+}
