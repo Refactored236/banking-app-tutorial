@@ -3,13 +3,14 @@ const routes = {
     '/login': {  title: 'Login', templateId: 'login' },
     '/dashboard': { title: 'My Dashboard', templateId: 'dashboard', init: updateDashboard },
     '/credits': { title: 'App Credits', templateId: 'credits' }
-
 }
+
+const apiURL = '//localhost:5000/api';
+const unknownError = 'Unknown Error';
+const userDuplicateError = 'User already exists';
 
 //Global Variables
 let account = null;
-
-const userDuplicateError = 'User already exists';
 
 // Functions
 function updateRoute(){
@@ -83,29 +84,31 @@ async function login(){
     navigate('/dashboard');
 }
 
-async function createAccount(account){
+// API Interactions
+async function sendRequest(api, method, body) {
     try {
-        const response = await fetch('//localhost:5000/api/accounts', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: account
-        });
+        
+        const response = await fetch(apiURL + api, {
+            method: method || 'GET',
+            headers: body ? { 'Content-Type': 'application/json' } : undefined,
+            body});
+        
         return await response.json();
 
     } catch (error) {
-        return {error: error.message || 'Unknown Error'};        
+        return {error: error.message || unknownError}; 
     }
+}
+
+async function createAccount(account){
+    return sendRequest('/accounts', 'POST', account);
 }
 
 async function getAccount(user){
-    try {
-        const response = await fetch('//localhost:5000/api/accounts/' + encodeURIComponent(user));
-        return await response.json();
-    } catch (error) {
-        return {error: error.message || 'Unknown Error'};  
-    }
+    return sendRequest('/accounts/' + encodeURIComponent(user));
 }
 
+// Dashboard Update Functions
 function createTransactionRow(transaction){
     const template = document.getElementById('transaction');
     const transactionRow = template.content.cloneNode(true);
@@ -134,7 +137,7 @@ function updateDashboard() {
     updateElement('transactions', transactionsRows);
   }
 
-
+//General function to update an HTML element with test or nodes
 function updateElement(id, textOrNode) {
     const element = document.getElementById(id);
     element.textContent = ''; // Removes all children
